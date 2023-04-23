@@ -1,4 +1,4 @@
-# Data Connector Agent Reference Implementation
+# Data Connector Spark Implementation
 
 This directory contains a spark implementation of the Data Connector agent specification which fetches its data from a
 spark context.
