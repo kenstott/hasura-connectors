@@ -1,17 +1,9 @@
 {
-  "name": "@hasura/dc-agent-reference",
+  "name": "hasura-file-connector",
   "version": "0.1.0",
-  "description": "Reference implementation of a Data Connector Agent for Hasura GraphQL Engine",
-  "author": "Hasura (https://github.com/hasura/graphql-engine)",
+  "description": "Hasura data connector for files",
+  "author": "Kenneth Stott",
   "license": "Apache-2.0",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/hasura/graphql-engine.git"
-  },
-  "bugs": {
-    "url": "https://github.com/hasura/graphql-engine/issues"
-  },
-  "homepage": "https://github.com/hasura/graphql-engine#readme",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",

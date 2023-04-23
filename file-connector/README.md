@@ -1,4 +1,4 @@
-# Data Connector CSV Implementation
+# Data Connector File Implementation
 
 This directory contains a CSV/XLSX/JSON implementation of the Data Connector agent specification which fetches its data from a
 spark context.
