@@ -1,0 +1,5 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="spark-connector" type="NodeJSConfigurationType" node-parameters="--require ts-node/register" path-to-js-file="src/index.ts" working-dir="$PROJECT_DIR$/spark-connector">
+    <method v="2" />
+  </configuration>
+</component>

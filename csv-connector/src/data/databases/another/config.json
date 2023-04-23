@@ -1,0 +1,61 @@
+{
+  "nulls": [
+    "-",
+    "",
+    " - "
+  ],
+  "booleans": {
+    "positive": [
+      "yes",
+      "true"
+    ],
+    "negative": [
+      "no",
+      "false"
+    ]
+  },
+  "schema": {
+    "tables": [
+      {
+        "name": [
+          "employee"
+        ],
+        "description": "Custom description",
+        "foreign_keys": {
+          "Manager": {
+            "column_mapping": {
+              "MANAGER_ID": "EMPLOYEE_ID"
+            },
+            "foreign_table": [
+              "employee"
+            ]
+          },
+          "Department": {
+            "column_mapping": {
+              "DEPARTMENT_ID": "DEPARTMENT_ID"
+            },
+            "foreign_table": [
+              "department"
+            ]
+          }
+        }
+      },
+      {
+        "name": [
+          "department"
+        ],
+        "description": "Custom description",
+        "foreign_keys": {
+          "Manager": {
+            "column_mapping": {
+              "MANAGER_ID": "EMPLOYEE_ID"
+            },
+            "foreign_table": [
+              "employee"
+            ]
+          }
+        }
+      }
+    ]
+  }
+}

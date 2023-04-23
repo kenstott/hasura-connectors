@@ -1,0 +1,23 @@
+[
+  {
+    "firstName": "Chris",
+    "lastName": "Wood",
+    "Gender": "Male",
+    "Occupation": "Information Technology",
+    "address": {
+      "street": "59 Woodmont St",
+      "city": "Springfield",
+      "state": "MA"
+    },
+    "worksWith": [
+      "ACB Group",
+      "New Jersey"
+    ],
+    "cars": [
+      {
+        "name": "BMW X1",
+        "type": "Hatchback"
+      }
+    ]
+  }
+]
