@@ -193,3 +193,4 @@ Otherwise, add files into the "remoteFiles" part of the spark config file.
   dataset.
 * Livy server - have not added in authorization. You may need to change the code to include authorization if you are
   using a secure Livy server.
+* Need to do more work to improve the overall logic of matching physical names (spark) to graphql names. It's very messy right now. Lots of duplication of code.
