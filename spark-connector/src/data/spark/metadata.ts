@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2023 Kenneth R. Stott.
+ */
+
 import axios from "axios";
 import {waitOnStatementResponse} from "../livy";
 import {sparkSession} from "./init";

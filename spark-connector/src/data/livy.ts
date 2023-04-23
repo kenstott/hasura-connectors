@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2023 Kenneth R. Stott.
+ */
+
 import axios, {AxiosResponse} from "axios";
 
 import {sparkSession} from "./spark/init";

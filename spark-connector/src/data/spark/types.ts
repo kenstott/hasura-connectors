@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2023 Kenneth R. Stott.
+ */
+
 import {SchemaResponse} from "@hasura/dc-api-types";
 import {RawScalarValue} from "../../query";
 

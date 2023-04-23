@@ -1,5 +1,8 @@
-import moment from "moment/moment";
+/*
+ * Copyright (c) 2023 Kenneth R. Stott.
+ */
 
+import moment from "moment/moment";
 import {FileConfig} from "./fileConfig";
 
 export const guessPrimaryKey = (

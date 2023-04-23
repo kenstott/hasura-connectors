@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2023 Kenneth R. Stott.
+ */
+
 import fs from "fs";
 import {parse} from "csv-parse";
 import {convertToTypedDataSet, guessPrimaryKey} from "./guessData";

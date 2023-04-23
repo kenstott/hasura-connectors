@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2023 Kenneth R. Stott.
+ */
+
 import * as XLSX from 'xlsx';
 import {convertToTypedDataSet, guessPrimaryKey} from "./guessData";
 import {FileConfig} from "./fileConfig";

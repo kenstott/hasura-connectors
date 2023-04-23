@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2023 Kenneth R. Stott.
+ */
+
 import {FileConfig} from "./fileConfig";
 import path from "node:path";
 import fs from "fs";

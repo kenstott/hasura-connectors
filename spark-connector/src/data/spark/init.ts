@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2023 Kenneth R. Stott.
+ */
+
 import {schema, StaticData} from "../index";
 import {getTableMetadata} from "./metadata";
 import {waitOnSessionResponse, waitOnStatementResponse} from "../livy";

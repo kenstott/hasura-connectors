@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2023 Kenneth R. Stott.
+ */
+
 import {Query, SchemaResponse, TableName} from "@hasura/dc-api-types"
 import {Casing, Config} from "../config";
 import fs from "fs"
