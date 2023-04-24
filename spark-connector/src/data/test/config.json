@@ -30,6 +30,15 @@
     "tables": [
       {
         "name": [
+          "World_Countries_List"
+        ],
+        "primary_key": [
+          "Abreviation"
+        ],
+        "description": "List of countries and country codes"
+      },
+      {
+        "name": [
           "employee"
         ],
         "primary_key": [

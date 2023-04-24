@@ -3,6 +3,24 @@
 This directory contains a spark implementation of the Data Connector agent specification which fetches its data from a
 spark context.
 
+In order to develop/test locally - you must have access to a spark instance with a Livy server.
+You can set one up locally. This was how I set up a local environment:
+
+| Package    | Description                                                                                                                                                                                               |
+|------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Hadoop** | downloaded: [hadoop-2.7.3.tar.gz](https://archive.apache.org/dist/hadoop/common/hadoop-2.7.3/hadoop-2.7.3.tar.gz) and unzipped. Click [here](https://www.edureka.co/blog/install-hadoop-single-node-hadoop-cluster#:~:text=Install%20Hadoop%201%20Step%201%3A%20Click%20here%20to,mentioned%20below%20inside%20configuration%20tag%3A%20...%20More%20items) for configuration details. (run sbin/start-all.sh) |
+| **Spark**  | downloaded: [spark-2.4.0-bin-hadoop2.7.tgz](https://archive.apache.org/dist/spark/spark-2.4.0/spark-2.4.0-bin-hadoop2.7.tgz) and unzipped (run libexec/sbin/start-all.sh)                                 |
+| **Livy**   | downloaded: [apache-livy-0.7.1-incubating-bin](https://www.apache.org/dyn/closer.lua/incubator/livy/0.7.1-incubating/apache-livy-0.7.1-incubating-bin.zip) and unzipped (run ./bin/livy-server start)     |
+
+You may need to set up several environment variables when running Livy locally.
+```
+SCALA_HOME=<?>/scala-2.11.12
+SPARK_HOME=<?>/spark-2.4.0-bin-hadoop2.7
+LIVY_HOME=<?>/apache-livy-0.7.1-incubating-bin
+HADOOP_COMMON_HOME=<?>/hadoop/2.7.3
+HADOOP_HOME=<?>/hadoop/2.7.3
+HADOOP_CONF_HOME=${HADOOP_HOME}/libexec/etc/hadoop
+```
 ## Requirements
 
 * NodeJS 16
