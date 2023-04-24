@@ -30,7 +30,7 @@ const createSqlContext = async (files: string[]): Promise<void> => {
         const multiLine = path.extname(file) == '.json' ? '.option("multiLine", "true")' : ''
         // CSV files need the header feature for loading
         const header = path.extname(file) == '.csv' ? '.option("header", "true")' : ''
-        const tableName = path.parse(file).name;
+        const tableName = fixFileName(path.parse(file).name);
         const loadStatement = file.startsWith("local:") ? `.load("${file.replace("local:", "")}")` : `.load(org.apache.spark.SparkFiles.get("${path.basename(file)}"))`;
         return `
         // Load file into a dataframe within the spark sql context
@@ -49,6 +49,8 @@ const createSparkSession = async (files: string[] = []): Promise<number> => {
     })
     return (await waitOnSessionResponse(response)).data.id;
 }
+
+export const fixFileName = (file: string): string => file.replace(/[\W_]+/g, "_");
 export const loadSqlContext = async (name: string): Promise<StaticData> => {
     const sparkConfigPath = path.resolve(name, "config.json");
     sparkConfig = fs.existsSync(sparkConfigPath) ? JSON.parse(fs.readFileSync(sparkConfigPath).toString()) : {
@@ -63,13 +65,13 @@ export const loadSqlContext = async (name: string): Promise<StaticData> => {
         .map((file) => `local:${path.resolve(name, file)}`)
         .concat(sparkConfig.remoteFiles || [])
     const staticData = files.reduce((arr: StaticData, file: string) => {
-        arr[path.parse(file).name] = []
+        arr[fixFileName(path.parse(file).name)]= []
         return arr;
     }, {});
     sparkSession = await createSparkSession(files);
     await createSqlContext(files);
     for (let i = 0; i < files.length; i++) {
-        const tableName = path.parse(files[i]).name;
+        const tableName = fixFileName(path.parse(files[i]).name);
         const metaData = await getTableMetadata(tableName);
         schema.tables.push({
             name: [tableName],

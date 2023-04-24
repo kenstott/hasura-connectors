@@ -34,24 +34,24 @@ const getWhereClause = (tableName: string, where?: Record<string, any>): string 
     } else if (where?.type == 'binary_arr_op') {
         const binaryArrayComparison = where as ApplyBinaryArrayComparisonOperator;
         if (binaryArrayComparison.operator == 'in') {
-            return `${binaryArrayComparison.column.name} in(${getValueString(binaryArrayComparison)})`;
+            return `\`${binaryArrayComparison.column.name}\` in(${getValueString(binaryArrayComparison)})`;
         }
     } else if (where?.type == 'binary_op') {
         const binaryComparison = where as ApplyBinaryComparisonOperator;
         if (binaryComparison.value.type == 'scalar') {
             const scalarValue = binaryComparison.value as ScalarValueComparison;
-            return `${binaryComparison.column.name} ${getOperator[binaryComparison.operator]} ${getValueString(scalarValue)}`;
+            return `\`${binaryComparison.column.name}\` ${getOperator[binaryComparison.operator]} ${getValueString(scalarValue)}`;
         } else {
             const columnValue = binaryComparison.value as AnotherColumnComparison;
-            return `${binaryComparison.column.name} ${getOperator[binaryComparison.operator]} ${columnValue.column.name}`;
+            return `\`${binaryComparison.column.name}\` ${getOperator[binaryComparison.operator]} ${columnValue.column.name}`;
         }
     }
     return '';
 }
 export const getTableRows = async (tableName: string, config: Config, query?: Query | null) => {
-    const fieldClause = getFieldNames(tableName, config, query?.fields) ?? "*";
+    const fieldClause = getFieldNames(tableName, config, query?.fields).map((i) => '`' + i + '`') ?? "*";
     const fieldStatement = fieldClause.join(', ');
-    const sortClause = changeOrderByColumnNames(tableName, config, query?.order_by?.elements)?.map((i) => `${i.columnName} ${i.direction}`).join(',');
+    const sortClause = changeOrderByColumnNames(tableName, config, query?.order_by?.elements)?.map((i) => `\`${i.columnName}\` ${i.direction}`).join(',');
     const sortStatement = sortClause ? ` order by ${sortClause}` : '';
     const whereClause = getWhereClause(tableName, changeWhereColumnNames(tableName, config, query?.where) as Expression);
     const whereStatement = whereClause ? ` WHERE ${whereClause} ` : '';

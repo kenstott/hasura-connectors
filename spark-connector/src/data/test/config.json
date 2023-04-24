@@ -15,7 +15,8 @@
     ]
   },
   "remoteFiles": [
-    "https://cdn.wsform.com/wp-content/uploads/2020/06/industry.csv"
+    "https://cdn.wsform.com/wp-content/uploads/2020/06/industry.csv",
+    "https://www.thespreadsheetguru.com/s/World-Countries-List.csv"
   ],
   "coerceForeignKeys": {
     "employee": {
