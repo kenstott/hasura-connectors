@@ -4,7 +4,8 @@ This directory contains a spark implementation of the Data Connector agent speci
 spark context.
 
 In order to develop/test locally - you must have access to a spark instance with a Livy server.
-You can set one up locally. This was how I set up a local environment:
+You can set one up locally. Remember, hadoop, spark and livy all have to be version aligned. 
+This was how I set up a local environment with correct versions:
 
 | Package    | Description                                                                                                                                                                                                                                                                                                                                                                                                    |
 |------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -15,11 +16,11 @@ You can set one up locally. This was how I set up a local environment:
 You may need to set up several environment variables when running Livy locally.
 
 ```
-SCALA_HOME=<?>/scala-2.11.12
-SPARK_HOME=<?>/spark-2.4.0-bin-hadoop2.7
-LIVY_HOME=<?>/apache-livy-0.7.1-incubating-bin
-HADOOP_COMMON_HOME=<?>/hadoop/2.7.3
-HADOOP_HOME=<?>/hadoop/2.7.3
+SCALA_HOME=<path/to/scala>/scala-2.11.12
+SPARK_HOME=<path/to/spark>/spark-2.4.0-bin-hadoop2.7
+LIVY_HOME=<path/to/livy>/apache-livy-0.7.1-incubating-bin
+HADOOP_HOME=<path/to/hadoop>/hadoop/2.7.3
+HADOOP_COMMON_HOME=${HADOOP_HOME}
 HADOOP_CONF_HOME=${HADOOP_HOME}/libexec/etc/hadoop
 ```
 
@@ -82,16 +83,17 @@ Here's an example configuration that exposes all tables, un-namespaced:
 
 ## Other
 
-The original data connector reference project is synchronous and assumed responsibility for all computation.
+The original data connector reference project is synchronous and has responsibility for all computation.
 
-In order to use a remote async service (like Livy/Spark) it meant a significant refactor of the reference version.
+In order to use a remote async service (like Livy/Spark) it meant a significant refactor of the reference version to an async pattern.
 
-The second challenge is pushing down operations to spark to improve performance for large datasets. Currently, the spark
+**Push down** - to improve performance for large datasets the spark
 connector pushes down selection for a single table and manages sorting, filtering, column selection, and pagination.
 
-Nested relationships are handled by the data connector and uses a dataloader pattern to avoid the N+1 problem. Would be
+**Nested relationships** are handled by the data connector and uses a [dataloader](https://www.bing.com/search?q=npmjs+dataloader&cvid=8998ed62f6984ce384c6409fb984df5a&aqs=edge.0.0j69i64l2.2384j0j4&FORM=ANAB01&PC=U531) pattern to avoid the N+1 problem. Would be
 an improvement to push relationships down to spark server.
-Aggregates are still computed by the data connector instead of spark.
+
+**Aggregates** are computed by the data connector instead of spark. 
 
 ## Files
 
@@ -103,7 +105,7 @@ Otherwise, add files into the "remoteFiles" part of the spark config file.
 | CSV  | handles CSV files pretty well - but relies on schema inference from spark, which is not great. Does not identify primary keys, does not identify dates. If there are any conventions to indicate no number - like spaces or dashes - the schema will classify it as a string. |
 | JSON | works, but excludes all variables at the document root that are not primitives. Although spark supports embedded JSON columns - it does not seem that Hasura does. Might be able to flatten JSON file before loading into a dataframe.                                        |
 | XML  | It ought to work, but have not been able to locally get XML support working in Spark (library version issues). May also require additional hints in the spark config file - like rowTag or rootTag.                                                                           |
-| XLSX | Conceptually, ought to work. Need an XLSX driver for spark.read.load in order to test. May require additional additional spark config options to identify specific tabs and/or ranges to extract from.                                                                        |
+| XLSX | Requires the [xlsx jar](https://mvnrepository.com/artifact/com.crealytics/spark-excel) to be added to spark.                                                                                                                                                                  |
 
 ## Environment Variables
 
@@ -140,6 +142,14 @@ Otherwise, add files into the "remoteFiles" part of the spark config file.
   "remoteFiles": [
     "https://cdn.wsform.com/wp-content/uploads/2020/06/industry.csv"
   ],
+  // Define Excel sheets to be used to generate a dataframe
+  // Remember, the file also has to be included in your local files - or in
+  // "remoteFiles" above
+  "xlxs": {
+    "sales.xls": ["Invoices","Inventory"]
+  },
+  // Jars to be added to spark session
+  "jars": ["https://mvnrepository.com/artifact/com.crealytics/spark-excel_2.13/3.3.1_0.18.7"],
   // if a foreign key is to be used to link to
   // a target table - and there is a data type mismatch
   // that came from spark's schema inference
