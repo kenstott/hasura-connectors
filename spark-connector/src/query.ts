@@ -53,7 +53,7 @@ async function fetchAllByKeys(
     keys: readonly any[],
     subquery: Query | null): Promise<Record<string, Record<string, any>> | undefined> {
     const tableName = relationship.target_table[0];
-    const values = [...new Set(keys)];
+    const values = [...new Set(keys)].filter((i) => typeof i != 'number' || !isNaN(i));
     const where: ApplyBinaryArrayComparisonOperator = {
         type: 'binary_arr_op',
         operator: 'in',
@@ -67,8 +67,21 @@ async function fetchAllByKeys(
     const query: Query = {...subquery, limit: null, offset: null, where}
     const result = await performQuery([tableName], query)
 
+    if (relationship.relationship_type == 'object') {
+        return result.rows?.reduce((acc: Record<string, Record<string, any>>, row: Record<string, any>) => {
+            const rowKey = row[where?.column.name ?? ''].toString();
+            if (!acc[rowKey]) {
+                acc[rowKey] = row;
+            }
+            return acc;
+        }, {});
+    }
     return result.rows?.reduce((acc: Record<string, Record<string, any>>, row: Record<string, any>) => {
-        acc[row[where?.column.name ?? ''].toString()] = row;
+        const rowKey = row[where?.column.name ?? ''].toString();
+        if (!acc[rowKey]) {
+            acc[rowKey] = []
+        }
+        acc[rowKey].push(row);
         return acc;
     }, {});
 }
@@ -91,7 +104,16 @@ async function batchFunction(key: readonly Key[]): Promise<any[]> {
         key.map((i) => i.key),
         query
     );
-    return key.map(i => results?.[i.key.toString()] || undefined);
+    return key.map(i => {
+        const value = results?.[i.key.toString()];
+        if (!value) {
+            return undefined;
+        }
+        if (Array.isArray(value)) {
+            return value;
+        }
+        return [value];
+    });
 }
 
 const loader = new DataLoader<Key, any>(batchFunction);
@@ -372,9 +394,13 @@ const projectRow = (
                 const keyName = Object.entries(relationship.column_mapping)[0][0];
                 const key = coerceForeignKey(table, config, keyName, row[keyName])
                 const loaderKey: Key = {relationship, config, key, performQuery, query: subquery, fieldName};
+                let rows = await loader.load(loaderKey);
+                if (rows && !Array.isArray(rows)) {
+                    rows = [rows]
+                }
                 projectedRow[fieldName] = subquery ? {
                     aggregates: null,
-                    rows: [await loader.load(loaderKey)].filter(Boolean)
+                    rows: rows?.filter(Boolean) || []
                 } as any : {
                     aggregates: null,
                     rows: null

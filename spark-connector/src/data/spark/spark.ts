@@ -72,7 +72,7 @@ export const getTableRows = async (tableName: string, config: Config, query?: Qu
         .slice(1) // first line is not part of data - it's a total count - which current isn't used but might be helpful for pagination
         .map((item: string) => JSON.parse(item)) // convert each line to JSON
     return {
-        total: rows[0], // first row is
+        total: rows?.[0], // first row is
         rows: rows?.slice(1)
     };
 }

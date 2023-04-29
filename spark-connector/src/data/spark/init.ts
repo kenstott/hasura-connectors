@@ -13,11 +13,12 @@ import {SparkConfig} from "./types";
 export let sparkSession: number = 0;
 export let sparkConfig: SparkConfig;
 
-const supportedFileTypes = ['.csv', '.json', '.xml']
+const supportedFileTypes = ['.csv', '.json', '.xml', '.xlsx']
 const fileFormats: Record<string, string> = {
     '.csv': 'csv',
     '.json': 'json',
-    '.xml': 'xml'
+    '.xml': 'xml',
+    '.xlsx': 'com.crealytics.spark.excel'
 }
 const supportedFile = (file: string) => {
     return supportedFileTypes.indexOf(path.extname(file).toLowerCase()) > -1 && path.basename(file) !== 'config.json'
@@ -25,7 +26,7 @@ const supportedFile = (file: string) => {
 
 const createSqlContext = async (files: string[]): Promise<void> => {
     files = files.filter(supportedFile)
-    const code = files.map((file: string) => {
+    const codeOther = files.filter((file) => path.extname(file) != '.xlsx').map((file: string) => {
         // JSON files need the multiLine feature for loading
         const multiLine = path.extname(file) == '.json' ? '.option("multiLine", "true")' : ''
         // CSV files need the header feature for loading
@@ -39,13 +40,35 @@ const createSqlContext = async (files: string[]): Promise<void> => {
         ${tableName}.createOrReplaceTempView("${tableName}")
         `
     }).join("\n")
+    const codeXlsx = files
+        .filter((file) => path.extname(file) == '.xlsx')
+        .map((file: string) => {
+            const header = '.option("header", "true")';
+            const tableName = fixFileName(path.parse(file).name);
+            const xlsxName = path.basename(file);
+            const loadStatement = file.startsWith("local:") ? `.load("${file.replace("local:", "")}")` : `.load(org.apache.spark.SparkFiles.get("${path.basename(file)}"))`;
+            return sparkConfig.xlsx?.[xlsxName]?.map((sheet) => {
+                const dataAddress = `.option("dataAddress", "'${sheet}'!A1")`;
+                return `
+        // Load file into a dataframe within the spark sql context
+        val ${tableName}${sheet} = spark.sqlContext.read.format("${fileFormats[path.extname(file)]}")${header}.option("inferSchema", "true")${dataAddress}${loadStatement}
+        // Give it a table name to refer to it later
+        ${tableName}${sheet}.createOrReplaceTempView("${tableName}")
+        })
+        `
+            }).join("\n")
+        }).join("\n")
+    const code = `${codeXlsx ? "import com.crealytics.spark.excel._" : ""}
+    ${codeOther}
+    ${codeXlsx}`
     const response = await axios.post(`${process.env.LIVY_URI}/sessions/${sparkSession}/statements`, {code})
     await waitOnStatementResponse(response);
 }
 const createSparkSession = async (files: string[] = []): Promise<number> => {
     const response = await axios.post(`${process.env.LIVY_URI}/sessions`, {
         "kind": "spark",
-        files
+        files,
+        jars: sparkConfig.jars
     })
     return (await waitOnSessionResponse(response)).data.id;
 }
@@ -56,6 +79,7 @@ export const loadSqlContext = async (name: string): Promise<StaticData> => {
     sparkConfig = fs.existsSync(sparkConfigPath) ? JSON.parse(fs.readFileSync(sparkConfigPath).toString()) : {
         nulls: [],
         booleans: {positive: [], negative: []},
+        xlsx: {},
         remoteFiles: [],
         schema: {
             tables: []
@@ -63,9 +87,15 @@ export const loadSqlContext = async (name: string): Promise<StaticData> => {
     };
     const files = fs.readdirSync(name).filter(supportedFile)
         .map((file) => `local:${path.resolve(name, file)}`)
-        .concat(sparkConfig.remoteFiles || [])
+        .concat(sparkConfig.remoteFiles || []);
     const staticData = files.reduce((arr: StaticData, file: string) => {
-        arr[fixFileName(path.parse(file).name)]= []
+        if (path.extname(file) == '.xlsx') {
+            sparkConfig.xlsx?.[path.basename(file)].forEach((sheet) => {
+                arr[fixFileName(path.parse(file).name) + sheet] = []
+            })
+        } else {
+            arr[fixFileName(path.parse(file).name)] = []
+        }
         return arr;
     }, {});
     sparkSession = await createSparkSession(files);

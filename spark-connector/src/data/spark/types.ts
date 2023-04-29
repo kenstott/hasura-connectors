@@ -12,11 +12,13 @@ export interface SparkConfig {
         [table: string]: {
             [column: string]: 'integer' | 'string' | 'float'
         }
-    }
+    },
     booleans?: {
         positive: string[],
         negative: string[]
-    }
+    },
+    xlsx?: Record<string, string[]>,
+    jars?: string[],
     schema?: SchemaResponse
 }
 
