@@ -15,7 +15,10 @@
     ]
   },
   "xlsx": {
-    "sales.xlsx": ["invoices","inventory"]
+    "sales.xlsx": [
+      "invoices",
+      "inventory"
+    ]
   },
   "jars": [],
   "remoteFiles": [
