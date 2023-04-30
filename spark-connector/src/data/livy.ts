@@ -7,7 +7,7 @@ import axios, {AxiosResponse} from "axios";
 import {sparkSession} from "./spark/init";
 
 interface LivySessionResponse {
-    state: 'idle' | 'waiting'
+    state: 'idle' | 'waiting' | 'dead' | 'starting'
 }
 
 interface LivyStatementResponse {
@@ -27,6 +27,9 @@ export const waitOnStatementResponse = async (response: AxiosResponse<LivyStatem
 }
 export const waitOnSessionResponse = async (response: AxiosResponse<LivySessionResponse, any>): Promise<AxiosResponse<any, any>> => {
     while (response.data.state !== 'idle') {
+        if (response.data.state == 'dead') {
+            throw new Error("Livy server is responding with 'dead'")
+        }
         response = await axios.get(`${process.env.LIVY_URI}/sessions/${sparkSession}`)
     }
     return response;

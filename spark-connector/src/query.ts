@@ -59,7 +59,7 @@ async function fetchAllByKeys(
         operator: 'in',
         value_type: 'integer',
         column: {
-            name: Object.entries(relationship.column_mapping)[0][0],
+            name: Object.entries(relationship.column_mapping)[0][1],
             column_type: 'integer'
         },
         values
@@ -395,11 +395,14 @@ const projectRow = (
                 const key = coerceForeignKey(table, config, keyName, row[keyName])
                 const loaderKey: Key = {relationship, config, key, performQuery, query: subquery, fieldName};
                 let rows = await loader.load(loaderKey);
+                const calculatedAggregates = subquery?.aggregates
+                    ? calculateAggregates(rows, subquery.aggregates)
+                    : null;
                 if (rows && !Array.isArray(rows)) {
                     rows = [rows]
                 }
                 projectedRow[fieldName] = subquery ? {
-                    aggregates: null,
+                    aggregates: calculatedAggregates,
                     rows: rows?.filter(Boolean) || []
                 } as any : {
                     aggregates: null,
@@ -415,7 +418,7 @@ const projectRow = (
 };
 
 const starCountAggregateFunction = (rows: Record<string, RawScalarValue>[]): RawScalarValue => {
-    return rows.length;
+    return rows?.length || 0;
 };
 
 const columnCountAggregateFunction = (aggregate: ColumnCountAggregate) => (rows: Record<string, RawScalarValue>[]): RawScalarValue => {
