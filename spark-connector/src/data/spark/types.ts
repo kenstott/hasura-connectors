@@ -32,7 +32,7 @@ export interface SparkColumnMetadata {
 
 export type ElementType = 'struct' | 'long' | 'string' | 'double' | 'integer' | 'array' | 'timestamp' | 'float';
 export interface SparkTableMetadata {
-    type: ElementType;
+    type: ElementType | SparkTableMetadata;
     name: string;
     nullable: boolean;
     fields?: SparkTableMetadata[];

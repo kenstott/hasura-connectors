@@ -20,7 +20,11 @@ const metaDataFixes: Record<ElementType, ElementType> = {
 }
 
 const fixMetaData = (data: SparkTableMetadata): SparkTableMetadata => {
-    data.type = metaDataFixes[data.type];
+    if (typeof data.type == 'object') {
+        data.type = fixMetaData(data.type as SparkTableMetadata);
+    } else {
+        data.type = metaDataFixes[data.type as ElementType]
+    }
     data.fields = data.fields?.map((i) => fixMetaData(i));
     if (typeof data.elementType == 'object') {
         data.elementType = fixMetaData(data.elementType as SparkTableMetadata);

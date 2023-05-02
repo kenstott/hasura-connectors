@@ -143,10 +143,10 @@ export const loadSqlContext = async (name: string): Promise<StaticData> => {
                 deletable: false,
                 columns: (metaData.fields || [])
                     // filter out any JSON columns or Arrays - they are not supported by Hasura connector
-                    .filter((field) => field.type != 'struct' && field.type != 'array')
+                    .filter((field) => typeof field.type == 'string')
                     .map((field) => ({
                         name: field.name,
-                        type: field.type,
+                        type: field.type as string,
                         nullable: field.nullable,
                         insertable: false,
                         updatable: false,
