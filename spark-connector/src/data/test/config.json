@@ -14,13 +14,19 @@
       "false"
     ]
   },
+  "xml": {
+    "test.xml": [{"rowTag" : "food" }]
+  },
   "xlsx": {
     "sales.xlsx": [
-      "invoices",
-      "inventory"
+      { "sheet": "Invoices" },
+      { "sheet": "Inventory", "address": "A1"}
     ]
   },
-  "jars": [],
+  "jars": [
+    "https://repo1.maven.org/maven2/com/databricks/spark-xml_2.12/0.13.0/spark-xml_2.12-0.13.0.jar",
+    "https://repo1.maven.org/maven2/com/crealytics/spark-excel_2.12/3.3.1_0.18.7/spark-excel_2.12-3.3.1_0.18.7.jar"
+  ],
   "remoteFiles": [
     "https://cdn.wsform.com/wp-content/uploads/2020/06/industry.csv",
     "https://www.thespreadsheetguru.com/s/World-Countries-List.csv"

@@ -104,8 +104,8 @@ Otherwise, add files into the "remoteFiles" part of the spark config file.
 |------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | CSV  | handles CSV files pretty well - but relies on schema inference from spark, which is not great. Does not identify primary keys, does not identify dates. If there are any conventions to indicate no number - like spaces or dashes - the schema will classify it as a string. |
 | JSON | works, but excludes all variables at the document root that are not primitives. Although spark supports embedded JSON columns - it does not seem that Hasura does. Might be able to flatten JSON file before loading into a dataframe.                                        |
-| XML  | It ought to work, but have not been able to locally get XML support working in Spark (library version issues). May also require additional hints in the spark config file - like rowTag or rootTag.                                                                           |
-| XLSX | Requires the [xlsx jar](https://mvnrepository.com/artifact/com.crealytics/spark-excel) to be added to spark.                                                                                                                                                                  |
+| XML  | Requires the [xml jar](https://repo1.maven.org/maven2/com/databricks/spark-xml_2.12/0.13.0/spark-xml_2.12-0.13.0.jar) to be added to spark, requires scala 2.12 and Livy 0.8.0. You may need to remove the jar reference and the xml files if you are on < 0.8.0 Livy version |
+| XLSX | Requires the [xlsx jar](https://mvnrepository.com/artifact/com.crealytics/spark-excel) to be added to spark, requires scala 2.12 and Livy 0.8.0. You may need to remove the jar reference and the xlsx files if you are on < 0.8.0 Livy version                               |
 
 ## Environment Variables
 
@@ -142,6 +142,12 @@ Otherwise, add files into the "remoteFiles" part of the spark config file.
   "remoteFiles": [
     "https://cdn.wsform.com/wp-content/uploads/2020/06/industry.csv"
   ],
+  // Define XML elements to be used to generate a dataframe
+  // Remember, the file also has to be included in your local files - or in
+  // "remoteFiles" above
+  "xml": {
+    "test.xml": [{ "rowTag":  "food"}]
+  },
   // Define Excel sheets to be used to generate a dataframe
   // Remember, the file also has to be included in your local files - or in
   // "remoteFiles" above
@@ -149,6 +155,8 @@ Otherwise, add files into the "remoteFiles" part of the spark config file.
     "sales.xls": ["Invoices","Inventory"]
   },
   // Jars to be added to spark session
+  // prepend with "local:" if you want to add jars from a 
+  // local file store
   "jars": ["https://mvnrepository.com/artifact/com.crealytics/spark-excel_2.13/3.3.1_0.18.7"],
   // if a foreign key is to be used to link to
   // a target table - and there is a data type mismatch

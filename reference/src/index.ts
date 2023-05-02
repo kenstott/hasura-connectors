@@ -18,7 +18,7 @@ import {cloneDataset, defaultDbStoreName, deleteDataset, getDataset, getDbStoreN
 import {StaticData} from "./data/types";
 
 const port = Number(process.env.PORT) || 8100;
-const server = Fastify({logger: {transport: {target: 'pino-pretty'}}});
+export const server = Fastify({logger: {transport: {target: 'pino-pretty'}}});
 let staticData: Record<string, StaticData> = {};
 
 server.register(FastifyCors, {

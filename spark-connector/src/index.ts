@@ -22,7 +22,7 @@ dotConfig();
 
 
 const port = Number(process.env.PORT) || 8100;
-const server = Fastify({logger: {transport: {target: 'pino-pretty'}}});
+export const server = Fastify({logger: {transport: {target: 'pino-pretty'}}});
 let sparkMetadata: Record<string, StaticData> = {};
 
 server.register(FastifyCors, {
