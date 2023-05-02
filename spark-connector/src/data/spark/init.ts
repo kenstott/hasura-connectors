@@ -117,9 +117,13 @@ export const loadSqlContext = async (name: string): Promise<StaticData> => {
         .concat(sparkConfig.remoteFiles || []);
     const staticData = files.reduce((arr: StaticData, file: string) => {
         if (path.extname(file) == '.xlsx') {
-            sparkConfig.xlsx?.[path.basename(file)].forEach((sheet) => {
+            sparkConfig.xlsx?.[path.basename(file)].forEach(({sheet}) => {
                 arr[fixFileName(path.parse(file).name) + sheet] = []
             })
+        } else if (path.extname(file) == '.xml') {
+                sparkConfig.xml?.[path.basename(file)].forEach(({rowTag}) => {
+                    arr[fixFileName(path.parse(file).name) + rowTag] = []
+                })
         } else {
             arr[fixFileName(path.parse(file).name)] = []
         }
