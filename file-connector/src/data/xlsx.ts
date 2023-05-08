@@ -31,7 +31,7 @@ export const loadXlsx = (name: string, config: FileConfig): Promise<XlsxSheetRes
                 });
             });
             resolve(results);
-        } catch(error) {
+        } catch (error) {
             reject(error);
         }
     });

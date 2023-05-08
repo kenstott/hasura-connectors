@@ -1,36 +1,36 @@
 ﻿import {
-  Aggregate,
-  BinaryArrayComparisonOperator,
-  BinaryComparisonOperator,
-  ColumnCountAggregate,
-  ComparisonColumn,
-  ComparisonValue,
-  ExistsExpression,
-  ExistsInTable,
-  Expression,
-  Field,
-  OrderBy,
-  OrderByElement,
-  OrderByRelation,
-  Query,
-  QueryRequest,
-  Relationship,
-  ScalarValue,
-  SingleColumnAggregate,
-  TableName,
-  TableRelationships,
-  UnaryComparisonOperator
+    Aggregate,
+    BinaryArrayComparisonOperator,
+    BinaryComparisonOperator,
+    ColumnCountAggregate,
+    ComparisonColumn,
+    ComparisonValue,
+    ExistsExpression,
+    ExistsInTable,
+    Expression,
+    Field,
+    OrderBy,
+    OrderByElement,
+    OrderByRelation,
+    Query,
+    QueryRequest,
+    Relationship,
+    ScalarValue,
+    SingleColumnAggregate,
+    TableName,
+    TableRelationships,
+    UnaryComparisonOperator
 } from "@hasura/dc-api-types";
 import {
-  coerceUndefinedToNull,
-  filterIterable,
-  mapIterable,
-  reduceAndIterable,
-  reduceOrIterable,
-  skipIterable,
-  tableNameEquals,
-  takeIterable,
-  unreachable
+    coerceUndefinedToNull,
+    filterIterable,
+    mapIterable,
+    reduceAndIterable,
+    reduceOrIterable,
+    skipIterable,
+    tableNameEquals,
+    takeIterable,
+    unreachable
 } from "./util";
 import * as math from "mathjs";
 
@@ -282,7 +282,7 @@ const makePerformExistsSubquery = (
     };
 
     const results = performSubquery(row, targetTable, subquery);
-    return (results.aggregates?.count ?? 0) > 0;
+    return (results.aggregates?.count ?? 0) as number > 0;
 }
 
 const buildQueryForPathedOrderByElement = (orderByElement: OrderByElement, orderByRelations: Record<RelationshipName, OrderByRelation>): Query => {

@@ -288,7 +288,7 @@ const makePerformExistsSubquery = (
     };
 
     const results = performSubquery(row, targetTable, subquery);
-    return (results.aggregates?.count ?? 0) > 0;
+    return (results.aggregates?.count ?? 0) as number > 0;
 }
 
 const buildQueryForPathedOrderByElement = (orderByElement: OrderByElement, orderByRelations: Record<RelationshipName, OrderByRelation>): Query => {
@@ -527,7 +527,7 @@ const projectRow = (fields: Record<string, Field>, findRelationship: (relationsh
                 break;
 
             default:
-                return unreachable(field["type"]);
+                return unreachable(field["type"] as never);
         }
     }
     return projectedRow;

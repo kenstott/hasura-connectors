@@ -17,8 +17,8 @@ export interface SparkConfig {
         positive: string[],
         negative: string[]
     },
-    xml?: Record<string, { rowTag: string, xsd?: string}[]>,
-    xlsx?: Record<string, { sheet: string, address?: string}[]>,
+    xml?: Record<string, { rowTag: string, xsd?: string }[]>,
+    xlsx?: Record<string, { sheet: string, address?: string }[]>,
     jars?: string[],
     schema?: SchemaResponse
 }
@@ -31,6 +31,7 @@ export interface SparkColumnMetadata {
 }
 
 export type ElementType = 'struct' | 'long' | 'string' | 'double' | 'integer' | 'array' | 'timestamp' | 'float';
+
 export interface SparkTableMetadata {
     type: ElementType | SparkTableMetadata;
     name: string;

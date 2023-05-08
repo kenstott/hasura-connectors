@@ -29,7 +29,7 @@ export const loadJson = (name: string, config: FileConfig): Promise<JsonResult> 
                 primaryKey: guessPrimaryKey(flattedRecords, columns),
                 tableName
             });
-        } catch(error) {
+        } catch (error) {
             reject(error)
         }
     });

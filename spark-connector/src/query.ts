@@ -411,7 +411,7 @@ const projectRow = (
                 break;
 
             default:
-                return unreachable(field["type"]);
+                return unreachable(field["type"] as never);
         }
     }
     return projectedRow;

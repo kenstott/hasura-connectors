@@ -38,6 +38,6 @@ export const getTableMetadata = async (tableName: string): Promise<SparkTableMet
     server.log.info(`// Retrieving metadata inferred by spark...
     ${code}`)
     const response = await waitOnStatementResponse(await axios.post(`${process.env.LIVY_URI}/sessions/${sparkSession}/statements`, {code}));
-    const metaData: SparkTableMetadata =  JSON.parse(response.data.output.data?.['text/plain']);
+    const metaData: SparkTableMetadata = JSON.parse(response.data.output.data?.['text/plain']);
     return fixMetaData(metaData);
 }

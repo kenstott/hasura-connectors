@@ -15,12 +15,21 @@
     ]
   },
   "xml": {
-    "test.xml": [{"rowTag" : "food" }]
+    "test.xml": [
+      {
+        "rowTag": "food"
+      }
+    ]
   },
   "xlsx": {
     "sales.xlsx": [
-      { "sheet": "Invoices" },
-      { "sheet": "Inventory", "address": "A1"}
+      {
+        "sheet": "Invoices"
+      },
+      {
+        "sheet": "Inventory",
+        "address": "A1"
+      }
     ]
   },
   "jars": [

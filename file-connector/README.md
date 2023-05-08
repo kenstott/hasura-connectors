@@ -1,6 +1,7 @@
 # Data Connector File Implementation
 
-This directory contains a CSV/XLSX/JSON implementation of the Data Connector agent specification which fetches its data from a
+This directory contains a CSV/XLSX/JSON implementation of the Data Connector agent specification which fetches its data
+from a
 spark context.
 
 ## Requirements
@@ -61,8 +62,9 @@ Here's an example configuration that exposes all tables, un-namespaced:
 
 ## Files
 
-**Note:** Files are automatically profiled. It looks for a column with unique values and assumes 
-it is the primary key. Substitutes the boolean and null synonyms for string columns. After profiling, it determines the best
+**Note:** Files are automatically profiled. It looks for a column with unique values and assumes
+it is the primary key. Substitutes the boolean and null synonyms for string columns. After profiling, it determines the
+best
 data type. String is the final backstop for a data type. But does a good job of finding dates, booleans and numbers.
 
 | Type | Description                                                    |
@@ -157,4 +159,5 @@ data type. String is the final backstop for a data type. But does a good job of 
 
 * XML - TBD
 * JSON works - except - only for primitives - it turns those into strings.
-* Need to do more work to improve the overall logic of matching physical names (file & file system) to graphql names. It's very messy right now. Lots of duplication of code.
+* Need to do more work to improve the overall logic of matching physical names (file & file system) to graphql names.
+  It's very messy right now. Lots of duplication of code.

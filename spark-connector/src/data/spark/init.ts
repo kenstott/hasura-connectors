@@ -121,9 +121,9 @@ export const loadSqlContext = async (name: string): Promise<StaticData> => {
                 arr[fixFileName(path.parse(file).name) + sheet] = []
             })
         } else if (path.extname(file) == '.xml') {
-                sparkConfig.xml?.[path.basename(file)].forEach(({rowTag}) => {
-                    arr[fixFileName(path.parse(file).name) + rowTag] = []
-                })
+            sparkConfig.xml?.[path.basename(file)].forEach(({rowTag}) => {
+                arr[fixFileName(path.parse(file).name) + rowTag] = []
+            })
         } else {
             arr[fixFileName(path.parse(file).name)] = []
         }
@@ -137,7 +137,7 @@ export const loadSqlContext = async (name: string): Promise<StaticData> => {
         const subName =
             sparkConfig.xlsx?.[fileName]?.map((i) => i.sheet) ||
             sparkConfig.xml?.[fileName]?.map((i) => i.rowTag) || ['']
-        for(let i = 0; i < subName.length; i++) {
+        for (let i = 0; i < subName.length; i++) {
             const metaData = await getTableMetadata(`${tableName}${subName[i]}`);
             schema.tables.push({
                 name: [`${tableName}${subName[i]}`],
