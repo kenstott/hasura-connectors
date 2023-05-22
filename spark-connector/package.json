@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@fastify/cors": "^8.2.1",
-    "@hasura/dc-api-types": "0.30.0",
+    "@hasura/dc-api-types": "0.31.0",
     "axios": "^1.3.5",
     "csv-parse": "^5.3.10",
     "dataloader": "^2.2.2",
