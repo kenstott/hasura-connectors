@@ -3,7 +3,7 @@ hasura-connectors
 
 ## Summary
 
-Just a few ideas on exploiting the hasura connector SDK (which is based on exposing XML files). This is a fork of the repo for the official hasura connector SDK. There are 3 connectors in this forked repo - "reference" is the original connector for XML files, "file-connector" provides JSON, XLSX and CSV file support, and "spark-connect", which adds the ability to connect to a spark cluster.
+Just a few ideas on exploiting the hasura connector SDK (which is based on exposing XML files). This is a fork of the repo for the official hasura connector SDK. There are 3 connectors in this forked repo - "reference" is the original connector for XML files, "file-connector" provides JSON, XLSX and CSV file support, and "spark-connector", which adds the ability to connect to a spark cluster.
 
 ## Changes
 
